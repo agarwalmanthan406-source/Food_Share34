@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Available Food — FoodShare{% endblock %}
+
+{% block content %}
+<div style="max-width: var(--max-width); margin: 3rem auto; padding: 0 2rem; min-height: 60vh;">
+    <div style="margin-bottom: 2rem;">
+        <h2 style="font-family: var(--font-display); font-size: 2rem;">Available Surplus Food</h2>
+        <p style="color: var(--ink-muted);">Claim food before it expires to help reduce waste.</p>
+    </div>
+    
+    <!-- NEW: Live Search & Filters -->
+    <div class="filter-section">
+        <input type="text" id="food-search" class="search-bar" placeholder="Search for food or locations...">
+        <div class="filter-chips">
+            <button class="filter-chip active" data-filter="all">All</button>
+            <button class="filter-chip" data-filter="veg">Veg</button>
+            <button class="filter-chip" data-filter="vegan">Vegan</button>
+            <button class="filter-chip" data-filter="non-veg">Non-Veg</button>
+            <button class="filter-chip" data-filter="halal">Halal</button>
+        </div>
+    </div>
+    
+    <div class="display-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;" id="food-grid">
+        {% for listing in listings %}
+        <!-- Added data attributes and 'food-listing-card' class for JS filtering -->
+        <div class="feature-card food-listing-card" style="padding: 1.5rem; position: relative;" 
+             data-name="{{ listing.food_name|lower }} {{ listing.address|lower }}" 
+             data-dietary="{{ listing.dietary_type|lower }}">
+            
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                <h3 style="font-size: 1.2rem; margin: 0;">{{ listing.food_name }}</h3>
+                <span style="background: var(--accent-2-light); color: var(--accent-2); padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600;">
+                    {{ listing.remaining_quantity }} left
+                </span>
+            </div>
+            
+            <p style="font-size: 0.85rem; color: var(--ink-soft); margin-bottom: 1rem;">
+                Provided by <strong>{{ listing.provider_name }}</strong>
+            </p>
+            
+            <div style="font-size: 0.9rem; color: var(--ink-muted); line-height: 1.6; margin-bottom: 1.5rem;">
+                <p><strong>Dietary:</strong> {{ listing.dietary_type }}</p>
+                <p><strong>Pickup:</strong> {{ listing.address }}</p>
+                <p style="color: var(--danger); font-weight: 600; margin-top: 0.5rem;" 
+                   class="expiry-timer" 
+                   data-expires="{{ listing.expires_at }}">
+                </p>
+            </div>
+
+            <!-- Claim Form -->
+            <form method="POST" action="/volunteer/claim/{{ listing.id }}" style="display: flex; gap: 0.5rem;">
+                <input type="number" name="claim_quantity" min="1" max="{{ listing.remaining_quantity }}" 
+                       class="form-input" style="width: 80px; padding: 0.4rem;" value="1" required>
+                <button type="submit" class="btn-primary" style="flex-grow: 1; padding: 0.4rem;">Claim Food</button>
+            </form>
+        </div>
+        {% else %}
+        <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; background: var(--paper-card); border: 1px dashed var(--border); border-radius: var(--radius-md);">
+            <p style="color: var(--ink-muted); margin-bottom: 1rem;">No available food near you right now. Check back later!</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

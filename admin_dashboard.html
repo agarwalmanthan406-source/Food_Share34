@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard — FoodShare{% endblock %}
+
+{% block content %}
+<div style="max-width: var(--max-width); margin: 3rem auto; padding: 0 2rem; min-height: 60vh;">
+    <div style="margin-bottom: 2.5rem;">
+        <h2 style="font-family: var(--font-display); font-size: 2rem;">Platform Overview</h2>
+        <p style="color: var(--ink-muted);">Real-time impact and listing moderation</p>
+    </div>
+    
+    <!-- Metrics Grid -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+        
+        <div class="feature-card" style="padding: 2rem; text-align: center; border-bottom: 4px solid #2ecc71;">
+            <h3 style="font-size: 1rem; color: var(--ink-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Total Meals Rescued</h3>
+            <p style="font-family: var(--font-display); font-size: 3rem; color: #ffffff; line-height: 1;">{{ stats.meals }}</p>
+        </div>
+
+        <div class="feature-card" style="padding: 2rem; text-align: center; border-bottom: 4px solid var(--accent-2);">
+            <h3 style="font-size: 1rem; color: var(--ink-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Active Listings</h3>
+            <p style="font-family: var(--font-display); font-size: 3rem; color: #ffffff; line-height: 1;">{{ stats.available }}</p>
+        </div>
+
+        <div class="feature-card" style="padding: 2rem; text-align: center; border-bottom: 4px solid var(--ink-faint);">
+            <h3 style="font-size: 1rem; color: var(--ink-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">All-Time Listings</h3>
+            <p style="font-family: var(--font-display); font-size: 3rem; color: #ffffff; line-height: 1;">{{ stats.total }}</p>
+        </div>
+
+        <div class="feature-card" style="padding: 2rem; text-align: center; border-bottom: 4px solid var(--danger);">
+            <h3 style="font-size: 1rem; color: var(--ink-muted); margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 0.05em;">Expired Unclaimed</h3>
+            <p style="font-family: var(--font-display); font-size: 3rem; color: #ffffff; line-height: 1;">{{ stats.expired }}</p>
+        </div>
+        
+    </div>
+
+    <!-- Moderation Table Section -->
+    <div style="margin-bottom: 1.5rem;">
+        <h3 style="font-family: var(--font-display); font-size: 1.5rem; margin-bottom: 0.5rem;">Global Listing Moderation</h3>
+        <p style="color: var(--ink-muted); font-size: 0.9rem;">Review all active and expired listings posted on the network.</p>
+    </div>
+
+    <div class="feature-card" style="overflow-x: auto; padding: 0;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+                <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.1); background: rgba(255, 255, 255, 0.02);">
+                    <th style="padding: 1rem 1.5rem; color: var(--ink-muted); font-weight: 600; font-size: 0.85rem;">Food Item</th>
+                    <th style="padding: 1rem 1.5rem; color: var(--ink-muted); font-weight: 600; font-size: 0.85rem;">Provider</th>
+                    <th style="padding: 1rem 1.5rem; color: var(--ink-muted); font-weight: 600; font-size: 0.85rem;">Remaining Qty</th>
+                    <th style="padding: 1rem 1.5rem; color: var(--ink-muted); font-weight: 600; font-size: 0.85rem;">Expires At</th>
+                    <th style="padding: 1rem 1.5rem; color: var(--ink-muted); font-weight: 600; font-size: 0.85rem; text-align: right;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in listings %}
+                <tr style="border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+                    <td style="padding: 1rem 1.5rem; font-weight: 500;">{{ item.food_name }}</td>
+                    <td style="padding: 1rem 1.5rem; color: var(--ink-muted);">{{ item.provider_name }}</td>
+                    <td style="padding: 1rem 1.5rem;">{{ item.remaining_quantity }} / {{ item.quantity }}</td>
+                    <td style="padding: 1rem 1.5rem; color: var(--ink-muted); font-size: 0.9rem;">{{ item.expires_at.replace('T', ' ') }}</td>
+                    <td style="padding: 1rem 1.5rem; text-align: right;">
+                        <form action="/admin/listing/delete/{{ item.id }}" method="POST" style="display: inline;">
+                            <button type="submit" style="background: rgba(231, 76, 60, 0.2); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.4); padding: 0.3rem 0.8rem; border-radius: var(--radius-sm); font-size: 0.8rem; cursor: pointer; transition: background 0.2s;">
+                                Remove
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" style="padding: 3rem; text-align: center; color: var(--ink-muted);">
+                        No listings found on the platform.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

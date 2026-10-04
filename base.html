@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}FoodShare{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Load Three.js for 3D Background -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <!-- 3D Background Canvas -->
+    <canvas id="bg-canvas"></canvas>
+    
+    <!-- Custom Cursor -->
+    <div class="custom-cursor"></div>
+    <nav class="navbar">
+        <div class="nav-inner">
+            <a href="/" class="nav-brand">
+                <span class="brand-icon">🍽️</span>
+                <span class="brand-name">FoodShare</span>
+            </a>
+            <div class="nav-links">
+                {% if g.user %}
+                    <!-- Links for logged-in Provider -->
+                    {% if g.user.role == 'provider' %}
+                        <a href="/provider/dashboard">My Listings</a>
+                        <a href="/provider/listings/create">Post Food</a>
+                    
+                    <!-- Links for logged-in Volunteer -->
+                    {% elif g.user.role == 'volunteer' %}
+                        <a href="/volunteer/dashboard">Find Food</a>
+                        <a href="/volunteer/claims">My Claims</a>
+                        
+                    <!-- Links for logged-in Admin -->
+                    {% elif g.user.role == 'admin' %}
+                        <a href="/admin/dashboard">Platform Stats</a>
+                    {% endif %}
+                    
+                    <!-- Shared logged-in elements -->
+                    <span style="color: var(--ink-faint); margin: 0 1rem;">|</span>
+                    <span style="color: var(--ink); font-weight: 600;">{{ g.user.name.split()[0] }}</span>
+                    <a href="/logout" class="nav-cta">Sign out</a>
+                
+                {% else %}
+                    <!-- Links for logged-out visitors -->
+                    <a href="/login">Sign in</a>
+                    <a href="/register" class="nav-cta">Get started</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <!-- Add this block for flash messages -->
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div style="max-width: var(--max-width); margin: 1rem auto; padding: 0 2rem;">
+              {% for message in messages %}
+                <div style="background: var(--ink); color: var(--paper); padding: 1rem; border-radius: var(--radius-sm); margin-bottom: 1rem;">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+        
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <div class="footer-inner">
+            <span class="brand-icon">🍽️</span>
+            <span class="footer-name">FoodShare</span>
+            <p class="footer-copy">Don't let good food go to waste.</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

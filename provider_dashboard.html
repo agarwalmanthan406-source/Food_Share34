@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — FoodShare{% endblock %}
+
+{% block content %}
+<div style="max-width: var(--max-width); margin: 3rem auto; padding: 0 2rem; min-height: 60vh;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
+        <h2 style="font-family: var(--font-display); font-size: 2rem;">My Food Listings</h2>
+        <a href="/provider/listings/create" class="btn-primary">Post Surplus Food</a>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+        {% for listing in listings %}
+        <div class="feature-card" style="padding: 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
+                <h3 style="font-size: 1.2rem; margin: 0;">{{ listing.food_name }}</h3>
+                <span style="background: var(--accent-light); color: var(--accent); padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em;">
+                    {{ listing.status|upper }}
+                </span>
+            </div>
+            
+            <div style="font-size: 0.9rem; color: var(--ink-muted); line-height: 1.8;">
+                <p><strong>Available:</strong> {{ listing.remaining_quantity }} / {{ listing.quantity }} meals</p>
+                <p><strong>Dietary:</strong> {{ listing.dietary_type }}</p>
+                <p><strong>Location:</strong> {{ listing.address }}</p>
+                <p style="color: var(--danger); margin-top: 0.5rem; font-weight: 500;">
+                    <strong>Expires:</strong> {{ listing.expires_at.replace('T', ' ') }}
+                </p>
+            </div>
+            
+            <!-- Handoff List Button -->
+            <a href="/provider/listing/{{ listing.id }}/claims" class="btn-ghost" style="display: block; text-align: center; margin-top: 1.5rem; padding: 0.5rem;">View Handoff List</a>
+        </div>
+        {% else %}
+        <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; background: var(--paper-card); border: 1px dashed var(--border); border-radius: var(--radius-md);">
+            <p style="color: var(--ink-muted); margin-bottom: 1rem;">You haven't posted any surplus food yet.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
