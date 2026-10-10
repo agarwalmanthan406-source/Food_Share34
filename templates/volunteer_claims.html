@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}My Claims — FoodShare{% endblock %}
+
+{% block content %}
+<div style="max-width: var(--max-width); margin: 3rem auto; padding: 0 2rem; min-height: 60vh;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
+        <h2 style="font-family: var(--font-display); font-size: 2rem;">My Claims</h2>
+        <a href="/volunteer/dashboard" class="btn-ghost">Back to Available Food</a>
+    </div>
+    
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.5rem;">
+        {% for claim in claims %}
+        <div class="feature-card" style="padding: 1.5rem; border-left: 4px solid var(--accent);">
+            <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                <h3 style="font-size: 1.2rem; margin: 0;">{{ claim.food_name }}</h3>
+                <span style="background: var(--accent-light); color: var(--accent); padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">
+                    {{ claim.status }}
+                </span>
+            </div>
+            
+            <div style="font-size: 0.9rem; color: var(--ink-muted); line-height: 1.6;">
+                <p><strong>Quantity Claimed:</strong> {{ claim.quantity }} meals</p>
+                <p><strong>Provider:</strong> {{ claim.provider_name }}</p>
+                <p><strong>Pickup Location:</strong> {{ claim.address }}</p>
+                <p style="font-size: 0.8rem; margin-top: 1rem; color: var(--ink-faint);">
+                    Claimed on: {{ claim.claimed_at }}
+                </p>
+            </div>
+        </div>
+        {% else %}
+        <div style="grid-column: 1 / -1; text-align: center; padding: 4rem 2rem; background: var(--paper-card); border: 1px dashed var(--border); border-radius: var(--radius-md);">
+            <p style="color: var(--ink-muted); margin-bottom: 1rem;">You haven't claimed any food yet.</p>
+            <a href="/volunteer/dashboard" class="btn-primary">Find Food</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

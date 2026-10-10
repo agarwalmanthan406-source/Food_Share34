@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Claims for {{ listing.food_name }} — FoodShare{% endblock %}
+
+{% block content %}
+<div style="max-width: var(--max-width); margin: 3rem auto; padding: 0 2rem; min-height: 60vh;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2.5rem;">
+        <div>
+            <h2 style="font-family: var(--font-display); font-size: 2rem;">{{ listing.food_name }}</h2>
+            <p style="color: var(--ink-muted);">Handoff list for volunteers</p>
+        </div>
+        <a href="/provider/dashboard" class="btn-ghost">Back to Dashboard</a>
+    </div>
+    
+    <div style="background: var(--paper-card); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden;">
+        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+            <thead>
+                <tr style="background: var(--paper-warm); border-bottom: 1px solid var(--border);">
+                    <th style="padding: 1rem 1.5rem; color: var(--ink-soft); font-weight: 600;">Volunteer Name</th>
+                    <th style="padding: 1rem 1.5rem; color: var(--ink-soft); font-weight: 600;">Quantity Claimed</th>
+                    <th style="padding: 1rem 1.5rem; color: var(--ink-soft); font-weight: 600;">Time Claimed</th>
+                    <th style="padding: 1rem 1.5rem; color: var(--ink-soft); font-weight: 600;">Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for claim in claims %}
+                <tr style="border-bottom: 1px solid var(--border-soft);">
+                    <td style="padding: 1rem 1.5rem; font-weight: 500;">{{ claim.volunteer_name }}</td>
+                    <td style="padding: 1rem 1.5rem;">{{ claim.quantity }} meals</td>
+                    <td style="padding: 1rem 1.5rem; color: var(--ink-muted); font-size: 0.9rem;">{{ claim.claimed_at }}</td>
+                    <td style="padding: 1rem 1.5rem;">
+                        <span style="background: var(--accent-light); color: var(--accent); padding: 0.25rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase;">
+                            {{ claim.status }}
+                        </span>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4" style="padding: 3rem 1.5rem; text-align: center; color: var(--ink-muted);">
+                        No volunteers have claimed this food yet.
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
