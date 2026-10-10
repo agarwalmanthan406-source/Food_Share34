@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}FoodShare — Connect Surplus Food with Volunteers{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <div class="hero-inner">
+        <div class="hero-badge">Social Impact & Logistics</div>
+        <h1 class="hero-title">
+            Don't let good food<br>
+            <em>go to waste</em>
+        </h1>
+        <p class="hero-subtitle">
+            FoodShare connects restaurants, hostels, and eateries with local volunteers to distribute surplus food to those who need it—before it expires.
+        </p>
+        <div class="hero-actions">
+            <a href="{{ url_for('register') }}" class="btn-primary">Join the movement</a>
+            <a href="{{ url_for('login') }}" class="btn-ghost">Sign in</a>
+        </div>
+    </div>
+    <div class="hero-visual">
+        <div class="mock-card" style="border-left: 4px solid var(--accent);">
+            <div class="mock-card-header">
+                <span class="mock-label">Live Rescue</span>
+                <span style="color: var(--danger); font-weight: 600; font-size: 0.9rem;">⏳ 45 min left</span>
+            </div>
+            <div style="margin-bottom: 1rem;">
+                <h3 style="font-size: 1.5rem; margin-bottom: 0.2rem;">30 Paneer Meals</h3>
+                <p style="color: var(--ink-muted); font-size: 0.9rem;">XYZ Restaurant • 1.2 km away</p>
+            </div>
+            <div class="mock-bars">
+                <div class="mock-bar-row">
+                    <span class="mock-cat">Claimed</span>
+                    <div class="mock-bar-track">
+                        <div class="mock-bar" style="width: 85%"></div>
+                    </div>
+                    <span class="mock-amt">25</span>
+                </div>
+            </div>
+            <button class="btn-primary" style="width: 100%; margin-top: 1.5rem; text-align: center;">Claim Food</button>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="features-inner">
+        <div class="feature-card">
+            <div class="feature-icon">🍽️</div>
+            <h3 class="feature-title">Post in seconds</h3>
+            <p class="feature-body">Providers can list surplus food, set quantities, and specify strict expiry times to ensure safety.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3 class="feature-title">Real-time claiming</h3>
+            <p class="feature-body">Volunteers see live inventory. Our atomic database prevents duplicate claims instantly.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📍</div>
+            <h3 class="feature-title">Local impact</h3>
+            <p class="feature-body">Reduce urban food waste by connecting nearby resources directly to community volunteers.</p>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section">
+    <div class="cta-inner">
+        <h2 class="cta-title">Ready to make a difference?</h2>
+        <p class="cta-body">Whether you have food to give or time to volunteer, join FoodShare today.</p>
+        <a href="{{ url_for('register') }}" class="btn-primary">Create free account</a>
+    </div>
+</section>
+
+{% endblock %}
